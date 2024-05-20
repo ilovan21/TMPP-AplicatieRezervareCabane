@@ -119,41 +119,18 @@ public class CabinController {
             throw new RuntimeException("Failed to convert file to blob", e);
         }
     }
-    @PutMapping("/{cabinId}")
-    public Cabin updateCabin(@PathVariable Long cabinId,
-                             @RequestParam String location,
-                             @RequestParam double price,
-                             @RequestParam boolean isBooked,
-                             @RequestParam MultipartFile photo,
-                             @RequestParam int numberOfRooms,
-                             @RequestParam String type,
-                             @RequestParam Map<String, Object> specificProperties) {
-        try {
-            Optional<Cabin> optionalCabin = cabinService.getCabinById(cabinId);
-            if (optionalCabin.isPresent()) {
-                CabinUpdateStrategy strategy = updateStrategies.get(type.toLowerCase());
-                if (strategy == null) {
-                    throw new IllegalArgumentException("Invalid cabin type: " + type);
-                }
-                // Convertește fișierul MultipartFile în Blob
-                Blob photoBlob = convertMultipartFileToBlob(photo);
-                // Actualizează cabina folosind strategia corespunzătoare
-                return strategy.updateCabin(
-                        optionalCabin.get(),
-                        location,
-                        price,
-                        isBooked,
-                        photoBlob,
-                        numberOfRooms,
-                        specificProperties);
-            } else {
-                throw new RuntimeException("Cabin not found with ID: " + cabinId);
-            }
-        } catch (Exception e) {
-            // Gestionează orice excepție și returnează un mesaj de eroare
-            e.printStackTrace();
-            throw new RuntimeException("Failed to update cabin: " + e.getMessage());
-        }
-    }
+@PutMapping("/update/{cabinId}")
+public ResponseEntity<CabinResponse> updateCabin(@RequestParam String type,
+                                                 @PathVariable Long cabinId,
+                                                 @RequestParam String location,
+                                                 @RequestParam double price,
+                                                 @RequestParam boolean isBooked,
+                                                 @RequestParam MultipartFile photo,
+                                                 @RequestParam int numberOfRooms,
+                                                 @RequestParam Map<String, Object> specificProperties) {
+    Cabin updatedCabin = cabinService.updateCabin(cabinId, location, price, isBooked, photo, numberOfRooms, type, specificProperties);
+    CabinResponse cabinResponse = getCabinResponse(updatedCabin);
+    return ResponseEntity.ok(cabinResponse);
+}
 }
 

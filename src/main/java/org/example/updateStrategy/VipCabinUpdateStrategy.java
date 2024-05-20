@@ -6,34 +6,38 @@ import java.sql.Blob;
 import java.util.Map;
 
 public class VipCabinUpdateStrategy implements CabinUpdateStrategy {
-
-    @Override
-    public Cabin updateCabin(Cabin cabin, String location, double price, boolean isBooked, Blob photo, int numberOfRooms, Map<String, Object> specificProperties) {
+    public void updateCabin(Cabin cabin, Map<String, Object> specificProperties) {
         if (cabin instanceof VipCabin) {
             VipCabin vipCabin = (VipCabin) cabin;
-            vipCabin.setLocation(location);
-            vipCabin.setPrice(price);
-            vipCabin.setBooked(isBooked);
-            vipCabin.setNumberOfRooms(numberOfRooms);
 
-            if (specificProperties != null) {
-                Object hasPrivatePool = specificProperties.get("hasPrivatePool");
-                Object hasJacuzzi = specificProperties.get("hasJacuzzi");
-                Object hasSauna = specificProperties.get("hasSauna");
+            // Verifică dacă cheile sunt prezente în map și dacă valorile sunt de tipul așteptat
+            if (specificProperties.containsKey("hasPrivatePool") && specificProperties.get("hasPrivatePool") instanceof String) {
+                String hasPrivatePoolString = (String) specificProperties.get("hasPrivatePool");
+                boolean hasPrivatePool = hasPrivatePoolString.equalsIgnoreCase("yes");
+                vipCabin.setHasPrivatePool(hasPrivatePool);
+            } else {
+                throw new IllegalArgumentException("Invalid value for hasPrivatePool");
+            }
 
-                if (hasPrivatePool instanceof Boolean) {
-                    vipCabin.setHasPrivatePool((Boolean) hasPrivatePool);
-                }
-                if (hasJacuzzi instanceof Boolean) {
-                    vipCabin.setHasJacuzzi((Boolean) hasJacuzzi);
-                }
-                if (hasSauna instanceof Boolean) {
-                    vipCabin.setHasSauna((Boolean) hasSauna);
-                }
+            if (specificProperties.containsKey("hasJacuzzi") && specificProperties.get("hasJacuzzi") instanceof String) {
+                String hasJacuzziString = (String) specificProperties.get("hasJacuzzi");
+                boolean hasJacuzzi = hasJacuzziString.equalsIgnoreCase("yes");
+                vipCabin.setHasJacuzzi(hasJacuzzi);
+            } else {
+                throw new IllegalArgumentException("Invalid value for hasJacuzzi");
+            }
+
+            if (specificProperties.containsKey("hasSauna") && specificProperties.get("hasSauna") instanceof String) {
+                String hasSaunaString = (String) specificProperties.get("hasSauna");
+                boolean hasSauna = hasSaunaString.equalsIgnoreCase("yes");
+                vipCabin.setHasSauna(hasSauna);
+            } else {
+                throw new IllegalArgumentException("Invalid value for hasSauna");
             }
         } else {
-            throw new IllegalArgumentException("Invalid cabin type for VipCabinUpdateStrategy");
+            throw new IllegalArgumentException("Invalid cabin type");
         }
-        return cabin;
     }
+
+
 }

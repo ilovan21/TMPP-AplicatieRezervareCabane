@@ -6,5 +6,5 @@ import java.sql.Blob;
 import java.util.Map;
 
 public interface CabinUpdateStrategy {
-    Cabin updateCabin(Cabin cabin, String location, double price, boolean isBooked, Blob photo, int numberOfRooms, Map<String, Object> specificProperties);
+    void updateCabin(Cabin cabin, Map<String, Object> specificProperties);
 }
