@@ -9,6 +9,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -20,10 +21,24 @@ public interface ICabinService {
 
     void deleteCabin(Long cabinId);
 
-    Cabin updateCabin(Long cabinId,String location, double price, boolean isBooked, byte photo_bytes, int numberOfRooms);
+    //Cabin updateCabin(Long cabinId,String location, double price, boolean isBooked, byte photo_bytes, int numberOfRooms);
 
     Optional<Cabin> getCabinById(Long cabinId);
 
     List<Cabin> getAvailableCabins(LocalDate checkInDate, LocalDate checkOutDate, String cabinType);
 
+    //    @Override
+    //    public Cabin updateCabin(Long cabinId,String location, double price, boolean isBooked, byte photo_bytes, int numberOfRooms) {
+    //        return null; }
+    Cabin updateCabin(Long cabinId, String location, double price, boolean isBooked, Blob photo, int numberOfRooms, String type, Map<String, Object> specificProperties);
+
+    //    @Override
+    //    public Cabin updateCabin(Long cabinId,String location, double price, boolean isBooked, byte photo_bytes, int numberOfRooms) {
+    //        return null; }
+    //Cabin updateCabin(Long cabinId, String location, double price, boolean isBooked, Blob photo, int numberOfRooms, String type, Map<String, Object> specificProperties);
+
+    //    @Override
+    //    public Cabin updateCabin(Long cabinId,String location, double price, boolean isBooked, byte photo_bytes, int numberOfRooms) {
+    //        return null; }
+    //Cabin updateCabin(Long cabinId, String location, double price, boolean isBooked, Blob photo, int numberOfRooms, String type, Map<String, Object> specificProperties);
 }

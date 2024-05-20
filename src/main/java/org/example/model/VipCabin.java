@@ -25,6 +25,18 @@ public class VipCabin extends Cabin {
 
     public VipCabin() {}
 
+    public void setHasPrivatePool(boolean hasPrivatePool) {
+        this.hasPrivatePool = hasPrivatePool;
+    }
+
+    public void setHasJacuzzi(boolean hasJacuzzi) {
+        this.hasJacuzzi = hasJacuzzi;
+    }
+
+    public void setHasSauna(boolean hasSauna) {
+        this.hasSauna = hasSauna;
+    }
+
     public boolean isHasPrivatePool() {
         return hasPrivatePool;
     }

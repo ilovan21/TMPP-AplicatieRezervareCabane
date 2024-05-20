@@ -52,6 +52,34 @@ public abstract class Cabin {
         this.numberOfRooms = numberOfRooms;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
+    }
+
+    public void setPhoto(Blob photo) {
+        this.photo = photo;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public void setBookings(List<BookedCabin> bookings) {
+        this.bookings = bookings;
+    }
+
     public Long getId() {
         return id;
     }

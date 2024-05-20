@@ -23,6 +23,18 @@ public class StandardCabin extends Cabin {
         this.hasBathroom = hasBathroom;
     }
 
+    public void setHasFireplace(boolean hasFireplace) {
+        this.hasFireplace = hasFireplace;
+    }
+
+    public void setHasBathroom(boolean hasBathroom) {
+        this.hasBathroom = hasBathroom;
+    }
+
+    public void setHasKitchen(boolean hasKitchen) {
+        this.hasKitchen = hasKitchen;
+    }
+
     public StandardCabin() {}
 
     public boolean isHasFireplace() {

@@ -1,5 +1,9 @@
 package org.example.controller;
 
+import org.example.updateStrategy.CabinUpdateStrategy;
+import org.example.updateStrategy.StandardCabinUpdateStrategy;
+import org.example.updateStrategy.VipCabinUpdateStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.exception.PhotoRetrievalException;
 import org.example.model.Cabin;
@@ -12,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @RestController
@@ -24,9 +25,16 @@ public class CabinController {
 
     private static final Logger logger = Logger.getLogger(CabinController.class.getName());
     private final CabinService cabinService;
+    private final Map<String, CabinUpdateStrategy> updateStrategies;
 
+    @Autowired
     public CabinController(CabinService cabinService) {
         this.cabinService = cabinService;
+
+        // Inițializează strategiile de actualizare pentru fiecare tip de cabină
+        updateStrategies = new HashMap<>();
+        updateStrategies.put("standard", new StandardCabinUpdateStrategy());
+        updateStrategies.put("vip", new VipCabinUpdateStrategy());
     }
 
     @GetMapping("/all")
@@ -70,8 +78,6 @@ public class CabinController {
         }
     }
 
-
-
     @PostMapping("/add-standard")
     public Cabin createStandardCabin(@RequestParam String location,
                                      @RequestParam double price,
@@ -111,6 +117,42 @@ public class CabinController {
             return new javax.sql.rowset.serial.SerialBlob(file.getBytes());
         } catch (Exception e) {
             throw new RuntimeException("Failed to convert file to blob", e);
+        }
+    }
+    @PutMapping("/{cabinId}")
+    public Cabin updateCabin(@PathVariable Long cabinId,
+                             @RequestParam String location,
+                             @RequestParam double price,
+                             @RequestParam boolean isBooked,
+                             @RequestParam MultipartFile photo,
+                             @RequestParam int numberOfRooms,
+                             @RequestParam String type,
+                             @RequestParam Map<String, Object> specificProperties) {
+        try {
+            Optional<Cabin> optionalCabin = cabinService.getCabinById(cabinId);
+            if (optionalCabin.isPresent()) {
+                CabinUpdateStrategy strategy = updateStrategies.get(type.toLowerCase());
+                if (strategy == null) {
+                    throw new IllegalArgumentException("Invalid cabin type: " + type);
+                }
+                // Convertește fișierul MultipartFile în Blob
+                Blob photoBlob = convertMultipartFileToBlob(photo);
+                // Actualizează cabina folosind strategia corespunzătoare
+                return strategy.updateCabin(
+                        optionalCabin.get(),
+                        location,
+                        price,
+                        isBooked,
+                        photoBlob,
+                        numberOfRooms,
+                        specificProperties);
+            } else {
+                throw new RuntimeException("Cabin not found with ID: " + cabinId);
+            }
+        } catch (Exception e) {
+            // Gestionează orice excepție și returnează un mesaj de eroare
+            e.printStackTrace();
+            throw new RuntimeException("Failed to update cabin: " + e.getMessage());
         }
     }
 }
