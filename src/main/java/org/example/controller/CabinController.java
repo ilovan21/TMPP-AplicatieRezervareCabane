@@ -54,7 +54,6 @@ public class CabinController {
         if (photoBlob != null) {
             try {
                 logger.info("Attempting to retrieve photo bytes from Blob.");
-                // Dezactivează auto-commit pentru această tranzacție
                 photoBlob.setBinaryStream(1);
                 int blobLength = (int) photoBlob.length();
                 logger.info("Blob length: " + blobLength);

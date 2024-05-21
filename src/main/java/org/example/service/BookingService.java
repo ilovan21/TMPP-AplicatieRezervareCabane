@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.exception.InvalidBookingRequestException;
+import org.example.exception.ResourceNotFoundException;
 import org.example.model.BookedCabin;
 import org.example.model.Cabin;
 import org.example.repository.BookingRepository;
@@ -62,5 +63,10 @@ public class BookingService {
                                 || (bookingRequest.getCheckInDate().equals(existingBooking.getCheckOutDate())
                                 && bookingRequest.getCheckOutDate().equals(bookingRequest.getCheckInDate()))
                 );
+    }
+    public BookedCabin findByBookingConfirmationCode(String confirmationCode) {
+        return bookingRepository.findByBookingConfirmationCode(confirmationCode)
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :"+confirmationCode));
+
     }
 }

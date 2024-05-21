@@ -61,6 +61,9 @@ public class CabinService {
     public void deleteCabin(Long cabinId) {
         cabinRepository.deleteById(cabinId);
     }
+    public Optional<Cabin> getRoomById(Long cabinId) {
+        return Optional.of(cabinRepository.findById(cabinId).get());
+    }
 
 public Cabin updateCabin(Long cabinId, String location, double price, boolean isBooked, MultipartFile photo, int numberOfRooms, String type, Map<String, Object> specificProperties) {
     Optional<Cabin> optionalCabin = cabinRepository.findById(cabinId);
