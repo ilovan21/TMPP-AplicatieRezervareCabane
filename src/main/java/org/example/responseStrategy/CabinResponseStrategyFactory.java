@@ -7,14 +7,12 @@ import org.example.model.VipCabin;
 public class CabinResponseStrategyFactory {
 
     public static CabinResponseStrategy getStrategy(Cabin cabin) {
-        if (cabin instanceof Cabin) {
+        if (cabin instanceof StandardCabin) {
             return new StandardCabinResponseStrategy();
-//        } else if (cabin instanceof VipCabin) {
-//            return new VipCabinResponseStrategy();
-//        } else {
-//            throw new IllegalArgumentException("Unknown cabin type");
-//        }
+        } else if (cabin instanceof VipCabin) {
+            return new VipCabinResponseStrategy();
+        } else {
+            throw new IllegalArgumentException("Unknown cabin type");
         }
-        return null;
     }
 }

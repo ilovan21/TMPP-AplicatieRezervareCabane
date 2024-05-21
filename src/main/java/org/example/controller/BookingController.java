@@ -11,6 +11,7 @@ import org.example.responseStrategy.CabinResponseStrategy;
 import org.example.responseStrategy.CabinResponseStrategyFactory;
 import org.example.service.BookingService;
 import org.example.service.CabinService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,7 @@ public class BookingController {
     private BookingResponse getBookingResponse(BookedCabin booking) {
         Cabin theCabin = cabinService.getCabinById(booking.getCabin().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cabin not found"));
+        Hibernate.initialize(theCabin);
         byte[] photoBytes = getPhotoBytes(theCabin.getPhoto());
         List<BookingResponse> bookingInfo = bookingService.getAllBookings().stream()
                 .map(b -> new BookingResponse(

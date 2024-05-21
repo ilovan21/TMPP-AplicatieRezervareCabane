@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookedCabin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long bookingId;
@@ -42,7 +43,7 @@ public class BookedCabin {
     @Column(name = "confirmation_Code")
     private String bookingConfirmationCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cabin_id")
     private Cabin cabin;
 
