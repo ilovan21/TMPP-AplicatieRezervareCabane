@@ -6,6 +6,14 @@ import org.example.model.Cabin;
 
 import java.math.BigDecimal;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = StandardCabinResponse.class, name = "standard"),
+        @JsonSubTypes.Type(value = VipCabinResponse.class, name = "vip")
+})
 
 @Data
 @NoArgsConstructor
@@ -32,4 +40,13 @@ public abstract class CabinResponse {
         this.photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
         this.bookings = bookings;
     }
+//pt rezervare
+    public CabinResponse(Long id, String location, BigDecimal price, boolean isBooked, byte[] photoBytes) {
+        this.id = id;
+        this.location = location;
+        this.price = price;
+        this.isBooked = isBooked;
+        this.photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
+    }
+
 }

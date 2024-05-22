@@ -1,5 +1,6 @@
 package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,14 +33,17 @@ public class BookedCabin {
     private String guestEmail;
 
     @Column(name = "adults")
+    @JsonProperty("numOfAdults")
     private int NumOfAdults;
 
     @Column(name = "children")
+    @JsonProperty("numOfChildren")
     private int NumOfChildren;
 
     @Column(name = "total_guest")
     private int totalNumOfGuest;
 
+    @Setter
     @Column(name = "confirmation_Code")
     private String bookingConfirmationCode;
 
@@ -61,7 +65,4 @@ public class BookedCabin {
         calculateTotalNumberOfGuest();
     }
 
-    public void setBookingConfirmationCode(String bookingConfirmationCode) {
-        this.bookingConfirmationCode = bookingConfirmationCode;
-    }
 }

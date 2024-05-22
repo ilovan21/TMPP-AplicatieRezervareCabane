@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,7 +82,7 @@ public class BookingController {
                 .collect(Collectors.toList());
 
         CabinResponseStrategy strategy = CabinResponseStrategyFactory.getStrategy(theCabin);
-        CabinResponse cabinResponse = strategy.createCabinResponse(theCabin, photoBytes, bookingInfo);
+        CabinResponse cabinResponse = strategy.createCabinResponse(theCabin, photoBytes);
 
         return new BookingResponse(
                 booking.getBookingId(),
@@ -106,5 +107,19 @@ public class BookingController {
             throw new RuntimeException("Failed to retrieve photo bytes", e);
         }
     }
+    @GetMapping("/all-bookings")
+    public ResponseEntity<List<BookingResponse>> getAllBookings(){
+        List<BookedCabin> bookings = bookingService.getAllBookings();
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+        for (BookedCabin booking : bookings){
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            bookingResponses.add(bookingResponse);
+        }
+        return ResponseEntity.ok(bookingResponses);
+    }
+    @DeleteMapping("/{bookingId}")
+    public ResponseEntity<?> deleteBooking(@PathVariable Long bookingId) {
+        bookingService.deleteBooking(bookingId);
+        return ResponseEntity.ok("Booking deleted successfully.");
+    }
 }
-

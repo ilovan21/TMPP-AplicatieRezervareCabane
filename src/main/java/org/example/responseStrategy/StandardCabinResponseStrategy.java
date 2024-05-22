@@ -11,7 +11,7 @@ import java.util.List;
 
 public class StandardCabinResponseStrategy implements CabinResponseStrategy {
     @Override
-    public CabinResponse createCabinResponse(Cabin cabin, byte[] photoBytes, List<BookingResponse> bookingInfo) {
+    public CabinResponse createCabinResponse(Cabin cabin, byte[] photoBytes) {
         StandardCabin standardCabin = (StandardCabin) cabin;
         return new StandardCabinResponse(
                 standardCabin.getId(),
@@ -19,7 +19,6 @@ public class StandardCabinResponseStrategy implements CabinResponseStrategy {
                 BigDecimal.valueOf(standardCabin.getPrice()),
                 standardCabin.isBooked(),
                 photoBytes,
-                bookingInfo,
                 standardCabin.isHasFireplace(),
                 standardCabin.isHasKitchen(),
                 standardCabin.isHasBathroom()

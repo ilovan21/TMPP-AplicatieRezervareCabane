@@ -4,8 +4,11 @@ import org.example.exception.InvalidBookingRequestException;
 import org.example.exception.ResourceNotFoundException;
 import org.example.model.BookedCabin;
 import org.example.model.Cabin;
+import org.example.observer.Observable;
 import org.example.repository.BookingRepository;
 import org.example.response.BookingResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class BookingService {
+public class BookingService extends Observable {
+    private static final Logger logger = LoggerFactory.getLogger(BookingService.class);
     private final BookingRepository bookingRepository;
     private final CabinService cabinService;
 
@@ -27,6 +31,7 @@ public class BookingService {
     }
 
     public String saveBooking(Long cabinId, BookedCabin bookingRequest) {
+        logger.info("Received booking request: {}", bookingRequest);
         if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())){
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
         }
@@ -41,6 +46,10 @@ public class BookingService {
             throw  new InvalidBookingRequestException("Sorry, This cabin is not available for the selected dates;");
         }
         return bookingRequest.getBookingConfirmationCode();
+    }
+    public void deleteBooking(Long bookingId) {
+        bookingRepository.deleteById(bookingId);
+        notifyObservers("Booking with ID " + bookingId + " has been deleted.");
     }
 
     private boolean cabinIsAvailable(BookedCabin bookingRequest, List<BookedCabin> existingBookings) {

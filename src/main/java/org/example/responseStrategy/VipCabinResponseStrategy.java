@@ -5,13 +5,17 @@ import org.example.response.BookingResponse;
 import org.example.response.CabinResponse;
 import org.example.response.VipCabinResponse;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 
 public class VipCabinResponseStrategy implements CabinResponseStrategy {
 
     @Override
-    public CabinResponse createCabinResponse(Cabin cabin, byte[] photoBytes, List<BookingResponse> bookingInfo) {
+    public CabinResponse createCabinResponse(Cabin cabin, byte[] photoBytes) {
         VipCabin vipCabin = (VipCabin) cabin;
         return new VipCabinResponse(
                 vipCabin.getId(),
@@ -19,7 +23,6 @@ public class VipCabinResponseStrategy implements CabinResponseStrategy {
                 BigDecimal.valueOf(vipCabin.getPrice()),
                 vipCabin.isBooked(),
                 photoBytes,
-                bookingInfo,
                 vipCabin.isHasPrivatePool(),
                 vipCabin.isHasJacuzzi(),
                 vipCabin.isHasSauna()

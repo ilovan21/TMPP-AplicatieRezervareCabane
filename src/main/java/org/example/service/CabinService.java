@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.factory.CabinFactory;
 import org.example.model.Cabin;
+import org.example.observer.Observable;
 import org.example.repository.CabinRepository;
 import org.example.updateStrategy.CabinUpdateStrategy;
 import org.example.updateStrategy.StandardCabinUpdateStrategy;
@@ -18,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 // implements ICabinService
 @Service
-public class CabinService {
+public class CabinService extends Observable {
     private final CabinRepository cabinRepository;
     private final Map<String, CabinUpdateStrategy> updateStrategies;
 
@@ -31,6 +32,10 @@ public class CabinService {
         updateStrategies.put("standard", new StandardCabinUpdateStrategy());
         updateStrategies.put("vip", new VipCabinUpdateStrategy());
         // Adăugați aici și alte tipuri de cabină și strategiile corespunzătoare, dacă există
+    }
+    public void deleteCabin(Long cabinId) {
+        cabinRepository.deleteById(cabinId);
+        notifyObservers("Cabin with ID " + cabinId + " has been deleted.");
     }
 
     public Cabin createCabin(String type, String location, double price, boolean isBooked, Blob photo, int numberOfRooms, Map<String, Object> specificProperties) {
@@ -55,11 +60,6 @@ public class CabinService {
             }
         }
         return new byte[0];
-    }
-
-    //@Override
-    public void deleteCabin(Long cabinId) {
-        cabinRepository.deleteById(cabinId);
     }
     public Optional<Cabin> getRoomById(Long cabinId) {
         return Optional.of(cabinRepository.findById(cabinId).get());

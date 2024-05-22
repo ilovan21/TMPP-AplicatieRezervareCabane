@@ -1,7 +1,12 @@
 package org.example.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.List;
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class VipCabinResponse extends CabinResponse{
     private boolean hasPrivatePool;
@@ -11,11 +16,41 @@ public class VipCabinResponse extends CabinResponse{
                             byte[] photoBytes , List<BookingResponse> bookings, boolean hasPrivatePool, boolean hasJacuzzi, boolean hasSauna) {
         super(id, location, price, isBooked, photoBytes, bookings);
         // caracteristici specifice
-        this.hasPrivatePool = this.hasPrivatePool;
-        this.hasJacuzzi = this.hasJacuzzi;
-        this.hasSauna = this.hasSauna;
+        this.hasPrivatePool = hasPrivatePool;
+        this.hasJacuzzi = hasJacuzzi;
+        this.hasSauna = hasSauna;
+    }
+    //pentru rezervare raspuns
+    public VipCabinResponse(Long id, String location, BigDecimal price, boolean isBooked,
+                            byte[] photoBytes , boolean hasPrivatePool, boolean hasJacuzzi, boolean hasSauna) {
+        super(id, location, price, isBooked, photoBytes);
+        // caracteristici specifice
+        this.hasPrivatePool = hasPrivatePool;
+        this.hasJacuzzi = hasJacuzzi;
+        this.hasSauna = hasSauna;
     }
 
-    public VipCabinResponse(Long id, String location, double price, boolean booked, byte[] bytes, List<BookingResponse> collect, boolean hasPrivatePool, boolean hasJacuzzi, boolean hasSauna) {
+    public boolean isHasPrivatePool() {
+        return hasPrivatePool;
+    }
+
+    public void setHasPrivatePool(boolean hasPrivatePool) {
+        this.hasPrivatePool = hasPrivatePool;
+    }
+
+    public boolean isHasJacuzzi() {
+        return hasJacuzzi;
+    }
+
+    public void setHasJacuzzi(boolean hasJacuzzi) {
+        this.hasJacuzzi = hasJacuzzi;
+    }
+
+    public boolean isHasSauna() {
+        return hasSauna;
+    }
+
+    public void setHasSauna(boolean hasSauna) {
+        this.hasSauna = hasSauna;
     }
 }

@@ -78,6 +78,7 @@ public class CabinController {
     }
 
     @PostMapping("/add-standard")
+
     public Cabin createStandardCabin(@RequestParam String location,
                                      @RequestParam double price,
                                      @RequestParam boolean isBooked,
@@ -131,5 +132,9 @@ public ResponseEntity<CabinResponse> updateCabin(@RequestParam String type,
     CabinResponse cabinResponse = getCabinResponse(updatedCabin);
     return ResponseEntity.ok(cabinResponse);
 }
+    @DeleteMapping("/{cabinId}")
+    public ResponseEntity<?> deleteCabin(@PathVariable Long cabinId) {
+        cabinService.deleteCabin(cabinId);
+        return ResponseEntity.ok("Cabin deleted successfully.");
+    }
 }
-
