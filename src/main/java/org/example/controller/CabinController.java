@@ -13,12 +13,16 @@ import org.example.visitor.CabinResponseVisitor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Logger;
 
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/cabins")
 public class CabinController {
