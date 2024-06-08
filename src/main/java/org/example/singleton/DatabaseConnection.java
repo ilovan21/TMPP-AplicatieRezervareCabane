@@ -9,7 +9,6 @@ public class DatabaseConnection {
 
     private DatabaseConnection() {
         try {
-            // Replace with your DB connection details
             this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/CabinReservation", "postgres", "postgres");
         } catch (SQLException e) {
             e.printStackTrace();
